@@ -3,12 +3,17 @@ import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 
-import SingleDayDetails from './singeDay/SingleDayDetails';
+import { getMonthObjectArray } from './utilities';
+import SingleDayDetails from './components/singeDayDetails/SingleDayDetails';
+import Header from './components/header/Header';
 
 function App() {
+
+
   return (
     <div className="App">
-      <SingleDayDetails />
+      < Header />
+      {/* <SingleDayDetails /> */}
     </div>
   );
 }

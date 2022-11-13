@@ -15,38 +15,30 @@ const taskColor = [
   "purple",
 ]
 
-
 const SingleDayDetails = () => {
-  const [singleDayColor, setSingleDayColor] = useState([true, false, false, false, false, false])
+  const [singleDayColorIndex, setSingleDayColorIndex] = useState(0)
   const [singleDayTitle, setSingleDayTitle] = useState("")
+  const [singleDayValue, setSingleDayValue] = useState("")
   const [singleDayDesc, setSingleDayDesc] = useState("")
 
-  const dayColorClickHandler = (index) => {
-    let singleDayColorTmp = singleDayColor.map((elemet, i) => {
-      if (index === i) {
-        return true
-      }
-      else {
-        return false
-      }
-    })
-    setSingleDayColor(singleDayColorTmp)
+  const singleDaySaveHandler = (e) => {
+    e.preventDefault()
   }
 
   return (
     <div className='border w-screen h-screen flex  justify-center items-center'>
 
-      <div className='md:w-[40%] md:h-[55%] border-2 border-gray-200 flex flex-col rounded-2xl w-[90%] h-[45%] '>
+      <div className='md:w-[40%] md:h-[55%] border-2 border-gray-200 bg-white flex flex-col rounded-2xl w-[90%] h-[45%] '>
 
-        <div className='w-[100%] md:h-[20%] h-[15%] rounded-t-2xl bg-gray-400 flex flex-col justify-center align-middle'>
+        <div className='w-[100%] md:h-[20%] h-[15%] rounded-t-2xl bg-gray-200 flex flex-col justify-center align-middle'>
           <div className=' flex flex-row  justify-between ml-7 mr-7'>
             <div>
-              <span className='text-[1.5rem] text-gray-100'> <AiOutlineMenu /></span>
+              <span className='text-[1.5rem] text-gray-600'> <AiOutlineMenu /></span>
             </div>
 
             <div className='flex flex-row gap-4'>
-              <span className='text-[1.5rem]  text-gray-100 cursor-pointer'><IoTrashSharp /></span>
-              <span className='text-[1.5rem] text-gray-100 cursor-pointer'><AiOutlineClose /></span>
+              <span className='text-[1.5rem]  text-gray-600 cursor-pointer'><IoTrashSharp /></span>
+              <span className='text-[1.5rem] text-gray-600 cursor-pointer'><AiOutlineClose /></span>
             </div>
           </div>
         </div>
@@ -86,14 +78,13 @@ const SingleDayDetails = () => {
             {
 
               taskColor.map((color, index) => {
-                let classStr = `w-[30px] h-[30px] bg-${color}-500 rounded-2xl border-2 cursor-pointer flex justify-center items-center`
+                let classStr = `md:w-[40px] md:h-[40px] w-[30px] h-[30px] bg-${color}-500 rounded-3xl border-2 cursor-pointer flex justify-center items-center`
                 return (
                   <span className={classStr} key={index}
-                    onClick={() => dayColorClickHandler(index)}>
+                    onClick={() => setSingleDayColorIndex(index)}>
                     {
-                      (singleDayColor[index] === true) &&
-                      < AiOutlineCheck
-                        className='text-[15px] text-white' />
+                      (singleDayColorIndex === index) &&
+                      < AiOutlineCheck className='text-[15px] text-white' />
                     }
                   </span>)
               }
@@ -103,8 +94,10 @@ const SingleDayDetails = () => {
         </div>
 
         <div className='flex  w-[100%] h-[80px] flex-row justify-end items-center'>
-          <button className='md:w-[110px] md:h-[40px] mr-[5%] rounded bg-blue-400 text-[white]
-           w-[90px] h-[35px]'>Save</button>
+          <button className='md:w-[110px] md:h-[40px] mr-[5%] rounded bg-blue-400 hover:bg-blue-600 active:bg-blue-700 text-[white]
+           w-[90px] h-[35px]'
+            onClick={(e) => singleDaySaveHandler(e)}
+          >Save</button>
         </div>
 
       </div>
