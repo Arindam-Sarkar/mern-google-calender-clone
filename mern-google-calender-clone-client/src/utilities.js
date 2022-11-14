@@ -8,6 +8,8 @@ export const getMonthObjectArray = (month = new Date().getMonth(), year = new Da
     startingDate++
 
     return ({
+      month: month,
+      year: year,
       dateObj: new Date(year, month, startingDate)
     })
   })
