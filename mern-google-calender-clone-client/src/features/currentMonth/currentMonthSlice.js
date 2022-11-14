@@ -13,7 +13,7 @@ const getMonthObject = (month = new Date().getMonth(), year = new Date().getFull
       month: month,
       year: year,
       weekday: new Date(year, month, startingDate).getDay(),
-      Date: new Date(year, month, startingDate).getDate(),
+      date: new Date(year, month, startingDate).getDate(),
 
       // dateObj: new Date(year, month, startingDate)
     })
@@ -75,7 +75,7 @@ export const currentMonthSlice = createSlice({
       state.monthArrayData = [...monthArrayDataNew]
 
 
-      console.log("month =", month, "Year =", year)
+      // console.log("month =", month, "Year =", year)
     },
 
 
@@ -95,7 +95,7 @@ export const currentMonthSlice = createSlice({
       // Write the value into monthArrayData
       state.monthArrayData = [...monthArrayDataNew]
 
-      console.log("month =", month, "Year =", year)
+      // console.log("month =", month, "Year =", year)
     },
 
   }
