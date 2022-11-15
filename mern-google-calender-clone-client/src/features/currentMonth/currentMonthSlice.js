@@ -4,8 +4,6 @@ export const getMonthObject = (monthIp = new Date().getMonth(), yearIp = new Dat
   let firstDayOfMonth = (new Date(yearIp, monthIp, 1)).getDay()
 
   // console.log("firstDayOfMonth : ", firstDayOfMonth);
-
-
   let startingDate = 0
   // If firstday is not sunday
   if (firstDayOfMonth !== 0) {
@@ -13,10 +11,7 @@ export const getMonthObject = (monthIp = new Date().getMonth(), yearIp = new Dat
     startingDate = 0 - firstDayOfMonth;
   }
 
-
-  // console.log("monthIp =", monthIp, "yearIp =", yearIp, "startingDate =", startingDate)
-
-
+  console.log("monthIp =", monthIp, "yearIp =", yearIp, "startingDate =", startingDate)
 
   let monthArray = new Array(35).fill({}).map((v, i) => {
     startingDate++
@@ -27,6 +22,9 @@ export const getMonthObject = (monthIp = new Date().getMonth(), yearIp = new Dat
       month: dataObj.getMonth(),
       year: dataObj.getFullYear(),
       weekday: dataObj.getDay(),
+
+      currentMonth: monthIp,
+      currentYear: yearIp
     })
   })
 
@@ -57,6 +55,9 @@ export const currentMonthSlice = createSlice({
     moveMonth: (state, action) => {
       let month = action.payload.month
       let year = action.payload.year
+
+      console.log("month =", month, "year =", year)
+
 
       if (action.payload.operation === "+") {
         month++;

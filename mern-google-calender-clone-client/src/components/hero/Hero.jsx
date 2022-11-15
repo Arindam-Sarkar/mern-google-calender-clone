@@ -3,10 +3,11 @@ import LeftPanel from '../leftPanel/LeftPanel'
 import RightPanel from '../rightPanel/RightPanel'
 
 const Hero = () => {
+
+
   return (
     <div className='flex'>
       <LeftPanel />
-
       <RightPanel />
     </div>
   )
