@@ -6,17 +6,19 @@ import { getMonthObjectArray } from './utilities';
 import SingleDayDetails from './components/singeDayDetails/SingleDayDetails';
 import Header from './components/header/Header';
 import LeftPanel from './components/leftPanel/LeftPanel';
+import RightPanel from './components/rightPanel/RightPanel';
+import Hero from './components/hero/Hero';
+import { getMonthObject } from './features/currentMonth/currentMonthSlice';
 
 
 function App() {
 
+  // console.log(getMonthObject());
 
   return (
-    <div className="App">
-      < Header />
-      {/* <SingleDayDetails /> */}
-
-      <LeftPanel />
+    <div>
+      <Header />
+      <Hero />
     </div>
   );
 }

@@ -15,7 +15,7 @@ const taskColor = [
   "purple",
 ]
 
-const SingleDayDetails = () => {
+const SingleDayDetails = ({ monthItem, isEdit }) => {
   const [singleDayColorIndex, setSingleDayColorIndex] = useState(0)
   const [singleDayTitle, setSingleDayTitle] = useState("")
   const [singleDayValue, setSingleDayValue] = useState("")
@@ -25,6 +25,8 @@ const SingleDayDetails = () => {
     e.preventDefault()
   }
 
+  console.log("monthItem = ", monthItem, "isEdit =", isEdit)
+
   return (
     <div className='border w-screen h-screen flex  justify-center items-center'>
 
@@ -32,6 +34,7 @@ const SingleDayDetails = () => {
 
         <div className='w-[100%] md:h-[20%] h-[15%] rounded-t-2xl bg-gray-200 flex flex-col justify-center align-middle'>
           <div className=' flex flex-row  justify-between ml-7 mr-7'>
+
             <div>
               <span className='text-[1.5rem] text-gray-600'> <AiOutlineMenu /></span>
             </div>
@@ -40,6 +43,7 @@ const SingleDayDetails = () => {
               <span className='text-[1.5rem]  text-gray-600 cursor-pointer'><IoTrashSharp /></span>
               <span className='text-[1.5rem] text-gray-600 cursor-pointer'><AiOutlineClose /></span>
             </div>
+
           </div>
         </div>
 

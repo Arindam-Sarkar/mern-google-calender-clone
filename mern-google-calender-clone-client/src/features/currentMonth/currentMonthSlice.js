@@ -1,21 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const getMonthObject = (month = new Date().getMonth(), year = new Date().getFullYear()) => {
-  let firstDayOfMonth = (new Date(year, month, 1)).getDay()
+export const getMonthObject = (monthIp = new Date().getMonth(), yearIp = new Date().getFullYear()) => {
+  let firstDayOfMonth = (new Date(yearIp, monthIp, 1)).getDay()
 
-  // Start the first day from sunday
-  let startingDate = 0 - firstDayOfMonth
+  // console.log("firstDayOfMonth : ", firstDayOfMonth);
 
-  let monthArray = new Array(35).fill({}).map(() => {
+
+  let startingDate = 0
+  // If firstday is not sunday
+  if (firstDayOfMonth !== 0) {
+    // Start the first day from sunday
+    startingDate = 0 - firstDayOfMonth;
+  }
+
+
+  // console.log("monthIp =", monthIp, "yearIp =", yearIp, "startingDate =", startingDate)
+
+
+
+  let monthArray = new Array(35).fill({}).map((v, i) => {
     startingDate++
+    let dataObj = new Date(yearIp, monthIp, startingDate)
 
     return ({
-      month: month,
-      year: year,
-      weekday: new Date(year, month, startingDate).getDay(),
-      date: new Date(year, month, startingDate).getDate(),
-
-      // dateObj: new Date(year, month, startingDate)
+      date: dataObj.getDate(),
+      month: dataObj.getMonth(),
+      year: dataObj.getFullYear(),
+      weekday: dataObj.getDay(),
     })
   })
 
