@@ -4,34 +4,54 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { moveMonth } from '../../features/currentMonth/currentMonthSlice.js'
-import { MONTH_TABLE, WEEK_TABLE } from '../../utilities'
 
+import { MONTH_TABLE, WEEK_TABLE } from '../../utilities'
+import SingleDayDetails from '../singeDayDetails/SingleDayDetails'
 
 const LeftPanel = () => {
   const monthArrayData = useSelector((state) => state.currentMonth.monthArrayData)
-  const [selectedDate, setSelectedDate] = useState({})
 
+  const [selectedDate, setSelectedDate] = useState({})
+  const [showSingleDayDetails, setShowSingleDayDetails] = useState({ show: true, dayItem: {}, isEdit: false })
+  const [today, setToday] = useState({})
   const dispatch = useDispatch()
 
 
-  let dateObj = new Date()
-  let thisDate = dateObj.getDate()
-  let thisMonth = dateObj.getMonth()
-  let thisYear = dateObj.getFullYear()
-  let thisWeekDay = dateObj.getDay()
+  useEffect(() => {
+    // Get today's date in an oject
+    let dateObj = new Date()
 
-  // useEffect(() => {
-  //   console.log("monthArrayData =", monthArrayData)
-  // }, [monthArrayData])
+    setToday({
+      date: dateObj.getDate(),
+      month: dateObj.getMonth(),
+      year: dateObj.getFullYear(),
+      weekday: dateObj.getDay()
+    })
+
+    setSelectedDate({
+      date: dateObj.getDate(),
+      month: dateObj.getMonth(),
+      year: dateObj.getFullYear(),
+      weekday: dateObj.getDay()
+    })
+
+    setShowSingleDayDetails(prev => ({
+      ...prev, show: true, dayItem: {
+        date: dateObj.getDate(),
+        month: dateObj.getMonth(),
+        year: dateObj.getFullYear(),
+        weekday: dateObj.getDay()
+      }
+    }))
+  }, [])
 
   const createClickHandler = (e) => {
     e.preventDefault()
+    setShowSingleDayDetails({ show: true, dayItem: { ...selectedDate }, isEdit: false })
+  }
 
-    // dispatch(moveMonth({
-    //   operation: '+',
-    //   month: monthArrayData[0].month,
-    //   year: monthArrayData[0].year
-    // }))
+  const exitShowSingleDayDetailsHandler = () => {
+    setShowSingleDayDetails({ show: false, dayItem: {}, isEdit: false })
   }
 
   const prevMonthClickHandler = (e) => {
@@ -59,6 +79,16 @@ const LeftPanel = () => {
   return (
     <div className='m-0 p-0 w-[20%] h-[93vh] bg-[white] border-gray-300 
     border-r-2 z-40 flex flex-col justify-start items-center'>
+
+      {((showSingleDayDetails.show) === true) &&
+        <div className='fixed left-0 right-0 mt-20'>
+          <SingleDayDetails
+            dayItem={showSingleDayDetails.dayItem}
+            isEdit={showSingleDayDetails.isEdit}
+            exitHandler={exitShowSingleDayDetailsHandler}
+          />
+        </div>
+      }
 
       <button className='mt-[20px] w-[140px] h-[50px] border-2 
       flex gap-[5px] justify-center items-center rounded-full shadow-xl bg-white
@@ -110,32 +140,32 @@ const LeftPanel = () => {
 
         <div className='w-[100%] text-[14px] mt-2 grid grid-cols-7 grid-rows-6 gap-x-2 gap-y-3'>
           {
-            monthArrayData.map((monthItem, index) => {
-              if ((thisDate === monthItem.date) &&
-                (thisMonth === monthItem.month) &&
-                (thisYear === monthItem.year) &&
-                (thisWeekDay === monthItem.weekday)) {
+            monthArrayData.map((dayItem, index) => {
+              if ((today.date === dayItem.date) &&
+                (today.month === dayItem.month) &&
+                (today.year === dayItem.year) &&
+                (today.weekday === dayItem.weekday)) {
                 return (
                   <div className='w-[28px] h-[28px] text-[14px] text-[white] cursor-pointer 
                     rounded-full bg-blue-500 flex  justify-center items-center font-semibold'
-                    onClick={() => setSelectedDate(monthItem)} key={index}>{monthItem.date}</div>
+                    onClick={() => setSelectedDate(dayItem)} key={index}>{dayItem.date}</div>
                 )
               }
-              else if ((selectedDate.date === monthItem.date) &&
-                (selectedDate.month === monthItem.month) &&
-                (selectedDate.year === monthItem.year) &&
-                (selectedDate.weekday === monthItem.weekday)) {
+              else if ((selectedDate.date === dayItem.date) &&
+                (selectedDate.month === dayItem.month) &&
+                (selectedDate.year === dayItem.year) &&
+                (selectedDate.weekday === dayItem.weekday)) {
                 return (
                   <div className='w-[28px] h-[28px] text-[14px] text-blue-800 cursor-pointer 
                   rounded-full bg-blue-200 flex  justify-center items-center font-bold '
-                    onClick={() => setSelectedDate(monthItem)} key={index}>{monthItem.date}</div>
+                    onClick={() => setSelectedDate(dayItem)} key={index}>{dayItem.date}</div>
                 )
               }
               else {
                 return (
                   <div className='w-[28px] h-[28px] text-[14px] cursor-pointer rounded-full 
                     flex  justify-center items-center'
-                    onClick={() => setSelectedDate(monthItem)} key={index}>{monthItem.date}</div>
+                    onClick={() => setSelectedDate(dayItem)} key={index}>{dayItem.date}</div>
                 )
               }
 

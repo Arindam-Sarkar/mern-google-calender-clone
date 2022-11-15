@@ -11,17 +11,17 @@ export const getMonthObject = (monthIp = new Date().getMonth(), yearIp = new Dat
     startingDate = 0 - firstDayOfMonth;
   }
 
-  console.log("monthIp =", monthIp, "yearIp =", yearIp, "startingDate =", startingDate)
+  // console.log("monthIp =", monthIp, "yearIp =", yearIp, "startingDate =", startingDate)
 
   let monthArray = new Array(35).fill({}).map((v, i) => {
     startingDate++
-    let dataObj = new Date(yearIp, monthIp, startingDate)
+    let dateObj = new Date(yearIp, monthIp, startingDate)
 
     return ({
-      date: dataObj.getDate(),
-      month: dataObj.getMonth(),
-      year: dataObj.getFullYear(),
-      weekday: dataObj.getDay(),
+      date: dateObj.getDate(),
+      month: dateObj.getMonth(),
+      year: dateObj.getFullYear(),
+      weekday: dateObj.getDay(),
 
       currentMonth: monthIp,
       currentYear: yearIp
@@ -56,7 +56,7 @@ export const currentMonthSlice = createSlice({
       let month = action.payload.month
       let year = action.payload.year
 
-      console.log("month =", month, "year =", year)
+      // console.log("month =", month, "year =", year)
 
 
       if (action.payload.operation === "+") {
