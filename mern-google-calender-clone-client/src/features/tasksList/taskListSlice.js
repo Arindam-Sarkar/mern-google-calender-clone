@@ -75,7 +75,6 @@ const taskListSLice = createSlice({
         }
       })
 
-
       console.log('modArray =', modArray)
       // Remove from local storage
       localStorage.removeItem("taskColorList")

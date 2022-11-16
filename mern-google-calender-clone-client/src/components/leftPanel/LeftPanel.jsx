@@ -7,10 +7,14 @@ import { moveMonth } from '../../features/currentMonth/currentMonthSlice.js'
 
 import { MONTH_TABLE, WEEK_TABLE, TASK_COLOR_TABLE } from '../../utilities'
 import SingleDayDetails from '../singeDayDetails/SingleDayDetails'
+import { updateColorList, changeColorListVisibility, addToTaskList, removeFromTaskList } from '../../features/tasksList/taskListSlice.js'
+
+
 
 const LeftPanel = () => {
   const monthArrayData = useSelector((state) => state.currentMonth.monthArrayData)
   const taskDataList = useSelector((state) => state.taskList.taskDataList)
+  const taskColorList = useSelector((state) => state.taskList.taskColorList)
 
   const [selectedDate, setSelectedDate] = useState({})
   const [showSingleDayDetails, setShowSingleDayDetails] = useState({ show: false, dayItem: {}, isEdit: false })
@@ -47,6 +51,18 @@ const LeftPanel = () => {
 
     console.log(taskDataList);
   }, [])
+
+
+  // If the taskDataList is changed, then update the color list
+  useEffect(() => {
+    dispatch(updateColorList({ taskDataList: taskDataList }))
+  }, taskDataList)
+
+
+  // Change the color visibility, this will be used to in the right section
+  const checkMarkHandler = (index, value) => {
+    dispatch(changeColorListVisibility({ color: index, visibility: value }))
+  }
 
   const createClickHandler = (e) => {
     e.preventDefault()
@@ -179,22 +195,23 @@ const LeftPanel = () => {
       </div>
 
 
-      <div className='w-[95%] h-[280px] flex flex-col justify-center items-start gap-3'>
-
+      <div className='w-[95%] h-[280px] mt-9 flex flex-col justify-start items-start gap-3'>
         {
           TASK_COLOR_TABLE.map((color, index) => {
-            return (
-              <div className='w-[100%]  flex justify-start items-center gap-4'>
-                <input
-                  type='checkbox'
+            if (taskColorList[index].exists === true) {
+              return (
+                <div className='w-[100%]  flex justify-start items-center gap-4'>
+                  <input
+                    type='checkbox'
+                    className='m-0 p-0 ml-6 w-[20px] h-[20px]  cursor-pointer 
+                    focus:outline-transparent focus:outline-0 focus:outline-offset-0'
+                    onChange={e => checkMarkHandler(index, e.target.checked)}
+                  />
 
-                  className='m-0 p-0 ml-6 w-[20px] h-[20px]  cursor-pointer 
-                  focus:outline-transparent focus:outline-0 focus:outline-offset-0'
-                />
-
-                <div className={`w-[60%] h-[20px] bg-${color}-500 border-2 rounded-md`}></div>
-              </div>
-            )
+                  <div className={`w-[60%] h-[20px] bg-${color}-500 border-2 rounded-md`}></div>
+                </div>
+              )
+            }
           })
 
         }

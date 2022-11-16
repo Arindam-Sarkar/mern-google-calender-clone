@@ -24,9 +24,7 @@ function App() {
   // dispatch(removeFromTaskList({ taskId: 570948078779850 }))
   // console.log("taskDataList = ", taskDataList)
   // dispatch(updateColorList({ taskDataList: taskDataList }))
-
   // dispatch(changeColorListVisibility({ color: COLOR_1_GRAY, visibility: false }))
-
 
   return (
     <div>
