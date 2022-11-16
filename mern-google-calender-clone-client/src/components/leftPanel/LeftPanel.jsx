@@ -5,14 +5,15 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { moveMonth } from '../../features/currentMonth/currentMonthSlice.js'
 
-import { MONTH_TABLE, WEEK_TABLE } from '../../utilities'
+import { MONTH_TABLE, WEEK_TABLE, TASK_COLOR_TABLE } from '../../utilities'
 import SingleDayDetails from '../singeDayDetails/SingleDayDetails'
 
 const LeftPanel = () => {
   const monthArrayData = useSelector((state) => state.currentMonth.monthArrayData)
+  const taskDataList = useSelector((state) => state.taskList.taskDataList)
 
   const [selectedDate, setSelectedDate] = useState({})
-  const [showSingleDayDetails, setShowSingleDayDetails] = useState({ show: true, dayItem: {}, isEdit: false })
+  const [showSingleDayDetails, setShowSingleDayDetails] = useState({ show: false, dayItem: {}, isEdit: false })
   const [today, setToday] = useState({})
   const dispatch = useDispatch()
 
@@ -35,14 +36,16 @@ const LeftPanel = () => {
       weekday: dateObj.getDay()
     })
 
-    setShowSingleDayDetails(prev => ({
-      ...prev, show: true, dayItem: {
-        date: dateObj.getDate(),
-        month: dateObj.getMonth(),
-        year: dateObj.getFullYear(),
-        weekday: dateObj.getDay()
-      }
-    }))
+    // setShowSingleDayDetails(prev => ({
+    //   ...prev, show: true, dayItem: {
+    //     date: dateObj.getDate(),
+    //     month: dateObj.getMonth(),
+    //     year: dateObj.getFullYear(),
+    //     weekday: dateObj.getDay()
+    //   }
+    // }))
+
+    console.log(taskDataList);
   }, [])
 
   const createClickHandler = (e) => {
@@ -99,8 +102,7 @@ const LeftPanel = () => {
         <span>Create</span>
       </button>
 
-      <div className='w-[95%] h-[270px] mt-[20px] border-gray-400 
-      border-2 flex flex-col'>
+      <div className='w-[95%] h-[270px] mt-[20px] flex flex-col'>
 
         <div className='w-[100%] ml-0 mt-1 flex justify-center items-center '>
 
@@ -170,14 +172,38 @@ const LeftPanel = () => {
               }
 
 
+
             })
           }
         </div>
-
       </div>
 
 
+      <div className='w-[95%] h-[280px] flex flex-col justify-center items-start gap-3'>
 
+        {
+          TASK_COLOR_TABLE.map((color, index) => {
+            return (
+              <div className='w-[100%]  flex justify-start items-center gap-4'>
+                <input
+                  type='checkbox'
+
+                  className='m-0 p-0 ml-6 w-[20px] h-[20px]  cursor-pointer 
+                  focus:outline-transparent focus:outline-0 focus:outline-offset-0'
+                />
+
+                <div className={`w-[60%] h-[20px] bg-${color}-500 border-2 rounded-md`}></div>
+              </div>
+            )
+          })
+
+        }
+
+
+
+
+
+      </div>
 
     </div >
   )

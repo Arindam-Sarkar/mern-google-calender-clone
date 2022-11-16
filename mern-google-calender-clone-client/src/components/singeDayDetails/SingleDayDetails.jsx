@@ -32,6 +32,8 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
       taskColor: taskColor
     }
     dispatch(addToTaskList(taskData))
+
+    exitHandler()
   }
 
   console.log("dayItem = ", dayItem, "isEdit =", isEdit, "taskId =", taskId)
