@@ -187,8 +187,6 @@ const LeftPanel = () => {
                 )
               }
 
-
-
             })
           }
         </div>
@@ -205,7 +203,9 @@ const LeftPanel = () => {
                     type='checkbox'
                     className='m-0 p-0 ml-6 w-[20px] h-[20px]  cursor-pointer 
                     focus:outline-transparent focus:outline-0 focus:outline-offset-0'
+                    defaultChecked={true}
                     onChange={e => checkMarkHandler(index, e.target.checked)}
+
                   />
 
                   <div className={`w-[60%] h-[20px] bg-${color}-500 border-2 rounded-md`}></div>
