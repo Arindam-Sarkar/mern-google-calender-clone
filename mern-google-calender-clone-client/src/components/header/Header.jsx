@@ -3,9 +3,10 @@ import logo from '../../assets/logo.png'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
 import { moveMonth, setMonth } from '../../features/currentMonth/currentMonthSlice'
+import { MONTH_TABLE } from '../../utilities'
 
 const Header = () => {
-  const monthArrayData = useSelector((state) => state.currentMonth.monthArrayData)
+  const monthArrayDataMain = useSelector((state) => state.currentMonth.monthArrayDataMain)
 
   const dispatch = useDispatch()
 
@@ -16,6 +17,28 @@ const Header = () => {
     let year = new Date().getFullYear()
 
     dispatch(setMonth({ month, year }))
+  }
+
+  const prevMonthClickHandler = (e) => {
+    e.preventDefault()
+
+    dispatch(moveMonth({
+      operation: '-',
+      type: "main",
+      month: monthArrayDataMain[0].currentMonth,
+      year: monthArrayDataMain[0].currentYear
+    }))
+  }
+
+  const nextMonthClickHandler = (e) => {
+    e.preventDefault()
+
+    dispatch(moveMonth({
+      operation: '+',
+      type: "main",
+      month: monthArrayDataMain[0].currentMonth,
+      year: monthArrayDataMain[0].currentYear
+    }))
   }
 
   return (
@@ -34,11 +57,17 @@ const Header = () => {
         onClick={(e) => todayClickHandler(e)}
       >Today</button>
 
-      <IoIosArrowBack className='ml-5 cursor-pointer text-gray-600' />
+      <IoIosArrowBack
+        className='ml-5 cursor-pointer text-gray-600'
+        onClick={(e) => prevMonthClickHandler(e)} />
 
-      <IoIosArrowForward className='ml-3 cursor-pointer text-gray-600' />
+      <IoIosArrowForward
+        className='ml-3 cursor-pointer text-gray-600'
+        onClick={(e) => nextMonthClickHandler(e)} />
 
-      <div className='ml-5 text-gray-500 font-semibold'>November 2022</div>
+      <div className='ml-5 text-gray-500 font-semibold'>
+        {`${MONTH_TABLE[monthArrayDataMain[0].currentMonth]} ${monthArrayDataMain[0].currentYear}`}
+      </div>
     </div>
   )
 }

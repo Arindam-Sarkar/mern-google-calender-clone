@@ -42,7 +42,8 @@ const readLocalStorageMonthObj = (storageName) => {
 }
 
 const initialState = {
-  monthArrayData: [...readLocalStorageMonthObj('monthArrayData')]
+  monthArrayDataMain: [...readLocalStorageMonthObj('monthArrayDataMain')],
+  monthArrayDataSmall: [...readLocalStorageMonthObj('monthArrayDataSmall')]
 };
 
 export const currentMonthSlice = createSlice({
@@ -57,7 +58,6 @@ export const currentMonthSlice = createSlice({
       let year = action.payload.year
 
       // console.log("month =", month, "year =", year)
-
 
       if (action.payload.operation === "+") {
         month++;
@@ -74,20 +74,35 @@ export const currentMonthSlice = createSlice({
         }
       }
 
-      // Delete the previous entry from local storage
-      localStorage.removeItem('monthArrayData')
+      if (action.payload.type === "main") {
+        // Delete the previous entry from local storage
+        localStorage.removeItem('monthArrayDataMain')
+        localStorage.removeItem('monthArrayDataSmall')
 
-      // Get new month array
-      const monthArrayDataNew = getMonthObject(month, year)
+        // Get new month array
+        const monthArrayDataMainNew = getMonthObject(month, year)
 
-      // Write it into local storage
-      localStorage.setItem('monthArrayData', JSON.stringify(monthArrayDataNew))
-
-      // Write the value into monthArrayData
-      state.monthArrayData = [...monthArrayDataNew]
+        // Write it into local storage
+        localStorage.setItem('monthArrayDataMain', JSON.stringify(monthArrayDataMainNew))
+        localStorage.setItem('monthArrayDataSmall', JSON.stringify(monthArrayDataMainNew))
 
 
-      // console.log("month =", month, "Year =", year)
+        // Write the value into monthArrayDataMain and monthArrayDataSmall
+        state.monthArrayDataMain = [...monthArrayDataMainNew]
+        state.monthArrayDataSmall = [...monthArrayDataMainNew]
+      } else {
+        // Delete the previous entry from local storage
+        localStorage.removeItem('monthArrayDataSmall')
+
+        // Get new month array
+        const monthArrayDataMainNew = getMonthObject(month, year)
+
+        // Write it into local storage
+        localStorage.setItem('monthArrayDataSmall', JSON.stringify(monthArrayDataMainNew))
+
+        // Write the value into monthArrayDataSmall
+        state.monthArrayDataSmall = [...monthArrayDataMainNew]
+      }
     },
 
 
@@ -95,17 +110,21 @@ export const currentMonthSlice = createSlice({
       let month = action.payload.month
       let year = action.payload.year
 
+
       // Delete the previous entry from local storage
-      localStorage.removeItem('monthArrayData')
+      localStorage.removeItem('monthArrayDataMain')
+      localStorage.removeItem('monthArrayDataSmall')
 
       // Get new month array
-      const monthArrayDataNew = getMonthObject(month, year)
+      const monthArrayDataMainNew = getMonthObject(month, year)
 
       // Write it into local storage
-      localStorage.setItem('monthArrayData', JSON.stringify(monthArrayDataNew))
+      localStorage.setItem('monthArrayDataMain', JSON.stringify(monthArrayDataMainNew))
+      localStorage.setItem('monthArrayDataSmall', JSON.stringify(monthArrayDataMainNew))
 
-      // Write the value into monthArrayData
-      state.monthArrayData = [...monthArrayDataNew]
+      // Write the value into monthArrayDataMain
+      state.monthArrayDataMain = [...monthArrayDataMainNew]
+      state.monthArrayDataSmall = [...monthArrayDataMainNew]
 
       // console.log("month =", month, "Year =", year)
     },

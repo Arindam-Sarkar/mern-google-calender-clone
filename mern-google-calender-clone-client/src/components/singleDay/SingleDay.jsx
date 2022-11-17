@@ -7,7 +7,7 @@ import { MONTH_TABLE, WEEK_TABLE } from '../../utilities'
 
 
 const SingleDay = ({ monthItem }) => {
-  const monthArrayData = useSelector((state) => state.currentMonth.monthArrayData)
+  const monthArrayDataMain = useSelector((state) => state.currentMonth.monthArrayDataMain)
   const [selectedDate, setSelectedDate] = useState({})
 
   const dispatch = useDispatch()

@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { AiOutlineClose } from 'react-icons/ai'
-import { moveMonth } from '../../features/currentMonth/currentMonthSlice.js'
 import { MONTH_TABLE, TASK_COLOR_TABLE, WEEK_TABLE } from '../../utilities'
 import SingleDayDetails from '../singeDayDetails/SingleDayDetails.jsx'
 import SingleDay from '../singleDay/SingleDay.jsx'
 
 
 const RightPanel = () => {
-  const monthArrayData = useSelector((state) => state.currentMonth.monthArrayData)
+  const monthArrayDataMain = useSelector((state) => state.currentMonth.monthArrayDataMain)
   const taskDataList = useSelector((state) => state.taskList.taskDataList)
   const taskColorList = useSelector((state) => state.taskList.taskColorList)
 
@@ -157,7 +156,7 @@ const RightPanel = () => {
 
       <div className='w-[100%] h-[95%] grid grid-cols-7 grid-rows-5'>
         {
-          monthArrayData.map((dayItem, index) => {
+          monthArrayDataMain.map((dayItem, index) => {
             itemCount = 0
 
             return (

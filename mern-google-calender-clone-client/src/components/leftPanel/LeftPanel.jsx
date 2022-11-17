@@ -3,7 +3,7 @@ import plus from '../../assets/plus.svg'
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { moveMonth } from '../../features/currentMonth/currentMonthSlice.js'
+import { moveMonth, setMonth } from '../../features/currentMonth/currentMonthSlice.js'
 
 import { MONTH_TABLE, WEEK_TABLE, TASK_COLOR_TABLE } from '../../utilities'
 import SingleDayDetails from '../singeDayDetails/SingleDayDetails'
@@ -12,7 +12,7 @@ import { updateColorList, changeColorListVisibility, addToTaskList, removeFromTa
 
 
 const LeftPanel = () => {
-  const monthArrayData = useSelector((state) => state.currentMonth.monthArrayData)
+  const monthArrayDataSmall = useSelector((state) => state.currentMonth.monthArrayDataSmall)
   const taskDataList = useSelector((state) => state.taskList.taskDataList)
   const taskColorList = useSelector((state) => state.taskList.taskColorList)
 
@@ -78,8 +78,9 @@ const LeftPanel = () => {
 
     dispatch(moveMonth({
       operation: '-',
-      month: monthArrayData[0].currentMonth,
-      year: monthArrayData[0].currentYear
+      type: "small",
+      month: monthArrayDataSmall[0].currentMonth,
+      year: monthArrayDataSmall[0].currentYear
     }))
   }
 
@@ -88,12 +89,16 @@ const LeftPanel = () => {
 
     dispatch(moveMonth({
       operation: '+',
-      month: monthArrayData[0].currentMonth,
-      year: monthArrayData[0].currentYear
+      type: "small",
+      month: monthArrayDataSmall[0].currentMonth,
+      year: monthArrayDataSmall[0].currentYear
     }))
   }
 
-
+  const setSelectedDateHandler = (dayItem) => {
+    setSelectedDate(dayItem)
+    dispatch(setMonth({ month: dayItem.month, year: dayItem.year }))
+  }
 
   return (
     <div className='m-0 p-0 w-[20%] h-[93vh] bg-[white] border-gray-300 
@@ -124,9 +129,8 @@ const LeftPanel = () => {
 
 
           <div className='w-[60%] text-[18px] text-gray-500 font-semibold  text-left '>
-            {`${MONTH_TABLE[monthArrayData[0].currentMonth]} ${monthArrayData[0].currentYear}`}
+            {`${MONTH_TABLE[monthArrayDataSmall[0].currentMonth]} ${monthArrayDataSmall[0].currentYear}`}
           </div>
-
 
           <div
             className=' w-[15%] '>
@@ -158,7 +162,7 @@ const LeftPanel = () => {
 
         <div className='w-[100%] text-[14px] mt-2 grid grid-cols-7 grid-rows-6 gap-x-2 gap-y-3'>
           {
-            monthArrayData.map((dayItem, index) => {
+            monthArrayDataSmall.map((dayItem, index) => {
               if ((today.date === dayItem.date) &&
                 (today.month === dayItem.month) &&
                 (today.year === dayItem.year) &&
@@ -166,7 +170,7 @@ const LeftPanel = () => {
                 return (
                   <div className='w-[28px] h-[28px] text-[14px] text-[white] cursor-pointer 
                     rounded-full bg-blue-500 flex  justify-center items-center font-semibold'
-                    onClick={() => setSelectedDate(dayItem)} key={index}>{dayItem.date}</div>
+                    onClick={() => setSelectedDateHandler(dayItem)} key={index}>{dayItem.date}</div>
                 )
               }
               else if ((selectedDate.date === dayItem.date) &&
@@ -176,14 +180,14 @@ const LeftPanel = () => {
                 return (
                   <div className='w-[28px] h-[28px] text-[14px] text-blue-800 cursor-pointer 
                   rounded-full bg-blue-200 flex  justify-center items-center font-bold '
-                    onClick={() => setSelectedDate(dayItem)} key={index}>{dayItem.date}</div>
+                    onClick={() => setSelectedDateHandler(dayItem)} key={index}>{dayItem.date}</div>
                 )
               }
               else {
                 return (
                   <div className='w-[28px] h-[28px] text-[14px] cursor-pointer rounded-full 
                     flex  justify-center items-center'
-                    onClick={() => setSelectedDate(dayItem)} key={index}>{dayItem.date}</div>
+                    onClick={() => setSelectedDateHandler(dayItem)} key={index}>{dayItem.date}</div>
                 )
               }
 
