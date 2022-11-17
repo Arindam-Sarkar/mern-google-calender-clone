@@ -19,10 +19,11 @@ function App() {
   const dispatch = useDispatch()
   // console.log(getMonthObject());
 
-  // TEMP_MEMORY_TESTING_TASKS.map(task =>dispatch(addToTaskList(task)))
 
   // dispatch(removeFromTaskList({ taskId: 570948078779850 }))
   // console.log("taskDataList = ", taskDataList)
+
+  // TEMP_MEMORY_TESTING_TASKS.map(task => dispatch(addToTaskList(task)))
   // dispatch(updateColorList({ taskDataList: taskDataList }))
   // dispatch(changeColorListVisibility({ color: COLOR_1_GRAY, visibility: false }))
 

@@ -14,6 +14,7 @@ const RightPanel = () => {
 
   const [today, setToday] = useState({})
   const [selectedDate, setSelectedDate] = useState({})
+  const [showSingleDayDetails, setShowSingleDayDetails] = useState({ show: false, dayItem: {}, isEdit: false, taskId: 0 })
 
   const [dayTask, setDayTask] = useState({
     edit: false,
@@ -54,15 +55,37 @@ const RightPanel = () => {
   }, [])
 
   const enterSingleDayDetailsHandler = (dayItem) => {
-    console.log(dayItem);
+    setShowSingleDayDetails({
+      show: true, dayItem: dayItem, isEdit: false, taskId: 0
+    })
+    // console.log(dayItem);
   }
 
-  const updateSingleDayDetailsHandler = (dayItem) => {
+  const updateSingleDayDetailsHandler = (taskitem) => {
 
+    setShowSingleDayDetails({
+      show: true, dayItem: {}, isEdit: true, taskId: taskitem.taskId
+    })
+    // console.log(taskitem)
+  }
+
+  const exitShowSingleDayDetailsHandler = () => {
+    setShowSingleDayDetails({ show: false, dayItem: {}, isEdit: false, taskId: 0 })
   }
 
   return (
     <div className='m-0 p-0 w-[80%] h-[93vh] bg-[white] flex flex-col justify-start items-center'>
+
+      {((showSingleDayDetails.show) === true) &&
+        <div className='fixed left-0 right-0 mt-20'>
+          <SingleDayDetails
+            dayItem={showSingleDayDetails.dayItem}
+            isEdit={showSingleDayDetails.isEdit}
+            taskId={showSingleDayDetails.taskId}
+            exitHandler={exitShowSingleDayDetailsHandler}
+          />
+        </div>
+      }
 
       <div className='w-[100%]   grid grid-cols-7 gap-x-0'>
         {
@@ -103,7 +126,7 @@ const RightPanel = () => {
                   }
                 </div>
 
-                <div className='w-[100%] h-[80%] mt-3 flex flex-col justify-start items-center gap-[9px]'>
+                <div className='w-[100%] h-[80%] mt-2 flex flex-col justify-start items-center gap-[9px]'>
                   {
                     taskDataList.map((taskitem, index) => {
                       // console.log("today = ", today)
@@ -119,16 +142,18 @@ const RightPanel = () => {
                         itemCount++
                         if (itemCount <= 2) {
                           return (
-                            <div className={`w-[80%] h-[23px]
+                            <div className={`w-[80%] h-[21px]
                              bg-${TASK_COLOR_TABLE[taskitem.taskColor]}-500 border-2 rounded-md
-                             flex justify-start items-center cursor-pointer text-[white] pl-2`}>
+                             flex justify-start items-center cursor-pointer text-[white] pl-2`}
+                              onClick={() => updateSingleDayDetailsHandler(taskitem)}
+                            >
                               {taskitem.taskTitle}
                             </div>
                           )
                         }
                         else if (itemCount === 3) {
                           return (
-                            <div className={`w-[80%] h-[23px]
+                            <div className={`w-[80%] h-[21px]
                              bg-${TASK_COLOR_TABLE[taskitem.taskColor]}-500 border-2 rounded-md
                              flex justify-center items-center cursor-pointer text-[white]`}>
                               <div className=''>Other Items ...</div>

@@ -39,23 +39,34 @@ const taskListSLice = createSlice({
 
     updateColorList: (state, action) => {
 
-      console.log("action =", action);
+      // console.log("action =", action);
 
       // Read local Storage
-      let rdArray = readLocalStorageColorList("taskColorList")
+      let rdColorArray = readLocalStorageColorList("taskColorList")
 
       // traverse through the incoming taskDataList and find which
       // colours are present, whichever colours are present, set their
-      // color list state to {exists: true}
-      action.payload.taskDataList.map((taskItem, index) => {
-        const { exists, ...remaining } = rdArray[taskItem.taskColor]
-        rdArray[taskItem.taskColor] = { exists: true, ...remaining }
+      // color list state to {exists: true} else set false
+
+      const wrColorArray = [{ exists: false, visibility: true },
+      { exists: false, visibility: true },
+      { exists: false, visibility: true },
+      { exists: false, visibility: true },
+      { exists: false, visibility: true },
+      { exists: false, visibility: true }]
+
+      rdColorArray.map((colorItem, indexColor) => {
+        action.payload.taskDataList.map((taskItem) => {
+          if (taskItem.taskColor === indexColor) {
+            wrColorArray[indexColor] = { exists: true, visibility: colorItem.visibility }
+          }
+        })
       })
 
       // Write it into local storage 
-      localStorage.setItem("taskColorList", JSON.stringify(rdArray))
+      localStorage.setItem("taskColorList", JSON.stringify(wrColorArray))
 
-      state.taskColorList = rdArray
+      state.taskColorList = wrColorArray
     },
 
     changeColorListVisibility: (state, action) => {
@@ -75,7 +86,7 @@ const taskListSLice = createSlice({
         }
       })
 
-      console.log('modArray =', modArray)
+      // console.log('modArray =', modArray)
       // Remove from local storage
       localStorage.removeItem("taskColorList")
 
@@ -86,17 +97,51 @@ const taskListSLice = createSlice({
     },
 
     addToTaskList: (state, action) => {
-      console.log("action = ", action.payload)
+      // console.log("action.payload = ", action.payload)
+
+      let lsWrArray = new Array()
 
       // Read local Storage
       let lsRdArray = readLocalStorageTaskList("taskDataList")
-
-      let lsWrArray = new Array()
       if (lsRdArray && lsRdArray.length > 0) {
         lsWrArray = [...lsRdArray, action.payload]
       } else {
         lsWrArray.push(action.payload)
       }
+
+      // console.log("lsWrArray = ", lsWrArray);
+
+      // Remove from local storage
+      localStorage.removeItem("taskDataList")
+
+      // Write it into local storage 
+      localStorage.setItem("taskDataList", JSON.stringify(lsWrArray))
+
+      // Change the state variable
+      state.taskDataList = lsWrArray
+    },
+
+    updateToTaskList: (state, action) => {
+      // console.log("action.payload = ", action.payload)
+
+      let lsWrArray = new Array()
+
+      // Read local Storage
+      let lsRdArray = readLocalStorageTaskList("taskDataList")
+      if (lsRdArray && lsRdArray.length > 0) {
+        // traverce to that specific task
+        lsWrArray = lsRdArray.map((taskRdItem) => {
+          if (taskRdItem.taskId === action.payload.taskId) {
+            return (action.payload)
+          } else {
+            return (taskRdItem)
+          }
+        })
+      } else {
+        lsWrArray.push(action.payload)
+      }
+
+      console.log("lsWrArray = ", lsWrArray);
 
       // Remove from local storage
       localStorage.removeItem("taskDataList")
@@ -109,14 +154,15 @@ const taskListSLice = createSlice({
     },
 
     removeFromTaskList: (state, action) => {
-      console.log("action = ", action.payload)
+      // console.log("action = ", action.payload)
 
       if (action.payload !== undefined && action.payload.taskId) {
 
-        console.log("action.payload.taskId = ", action.payload.taskId)
+        // console.log("action.payload.taskId = ", action.payload.taskId)
+        let lsWrArray = new Array()
+
         // Read local Storage
         let lsRdArray = readLocalStorageTaskList("taskDataList")
-        let lsWrArray = new Array()
         if (lsRdArray && lsRdArray.length > 0) {
           let arrFiltered = lsRdArray.filter(item => item.taskId !== action.payload.taskId)
           lsWrArray = [...arrFiltered]
@@ -128,7 +174,7 @@ const taskListSLice = createSlice({
         // Write it into local storage 
         localStorage.setItem("taskDataList", JSON.stringify(lsWrArray))
 
-        console.log("lsWrArray =", lsWrArray)
+        // console.log("lsWrArray =", lsWrArray)
         // Change the state variable
         state.taskDataList = lsWrArray
       }
@@ -141,5 +187,6 @@ export const {
   updateColorList,
   changeColorListVisibility,
   addToTaskList,
+  updateToTaskList,
   removeFromTaskList } = taskListSLice.actions
 export default taskListSLice.reducer

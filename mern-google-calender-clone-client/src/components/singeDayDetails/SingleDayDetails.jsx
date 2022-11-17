@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { AiOutlineClose, AiOutlineMenu, AiOutlineCheck } from 'react-icons/ai'
 import { IoTrashSharp, IoBookmarkOutline } from 'react-icons/io5'
@@ -7,36 +7,59 @@ import { MdOutlineWatchLater } from 'react-icons/md'
 import { HiOutlineMenuAlt3 } from 'react-icons/hi'
 
 import { MONTH_TABLE, WEEK_TABLE, TASK_COLOR_TABLE } from '../../utilities'
-import { addToTaskList } from '../../features/tasksList/taskListSlice'
-import { useDispatch } from 'react-redux'
-
+import { addToTaskList, updateToTaskList, removeFromTaskList } from '../../features/tasksList/taskListSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
+  const [taskData, setTaskData] = useState({
+    taskId: 0,
+    taskDate: {},
+    taskTitle: "",
+    taskDesc: "",
+    taskColor: 0
+  })
 
-
-  const [taskTitle, setTaskTitle] = useState("")
-  const [taskColor, setTaskColor] = useState(0)
-  const [taskDesc, setTaskDesc] = useState("")
+  const taskDataList = useSelector((state) => state.taskList.taskDataList)
 
   const dispatch = useDispatch()
 
   const singleDaySaveHandler = (e) => {
     e.preventDefault()
 
-    let taskId = Math.floor((Math.random() * 999999999999999) + 1)
-    const taskData = {
-      taskId: taskId,
-      taskDate: dayItem,
-      taskTitle: taskTitle,
-      taskDesc: taskDesc,
-      taskColor: taskColor
+    if (isEdit === true) {
+      dispatch(updateToTaskList(taskData))
+    } else {
+      dispatch(addToTaskList(taskData))
     }
-    dispatch(addToTaskList(taskData))
-
     exitHandler()
   }
 
-  console.log("dayItem = ", dayItem, "isEdit =", isEdit, "taskId =", taskId)
+  const singleDayDeleteHandler = (e) => {
+    e.preventDefault()
+
+    dispatch(removeFromTaskList(taskData))
+    exitHandler()
+  }
+
+  useEffect(() => {
+    if (isEdit === true) {
+      // If edit, traverce to that specific task and get it's details,
+      // from it's task id
+      let taskToEdit = {}
+
+      taskDataList.map(taskItem => {
+        if (taskItem.taskId === taskId) {
+          taskToEdit = taskItem
+        }
+      })
+
+      // console.log("taskToEdit = ", taskToEdit);
+      setTaskData(taskToEdit)
+    } else {
+      let taskId = Math.floor((Math.random() * 999999999999999) + 1)
+      setTaskData(prev => ({ ...prev, taskDate: dayItem, taskId: taskId }))
+    }
+  }, [0])
 
   return (
     <div className='border w-screen h-screen flex  justify-center items-start'>
@@ -51,7 +74,9 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
             </div>
 
             <div className='flex flex-row gap-4'>
-              <span className='text-[1.5rem]  text-gray-600 cursor-pointer'><IoTrashSharp /></span>
+              <span className='text-[1.5rem]  text-gray-600 cursor-pointer'>
+                <IoTrashSharp onClick={(e) => singleDayDeleteHandler(e)} />
+              </span>
               <span className='text-[1.5rem] text-gray-600 cursor-pointer'>
                 <AiOutlineClose onClick={() => exitHandler()} />
               </span>
@@ -60,21 +85,19 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
           </div>
         </div>
 
-
-
         <div>
           <input
             type="text"
             placeholder='Add Title'
             className='w-[80%] mt-7 border-0 border-b-2 ml-[16%]  outline-none 
             border-transparent focus:outline-none focus:ring-0 text-gray-900 md:text-[1.5rem]  text-[1.2rem]'
-            onChange={e => setTaskTitle(e.target.value)}
-          />
+            value={taskData.taskTitle}
+            onChange={e => setTaskData(prev => ({ ...prev, taskTitle: e.target.value }))} />
         </div>
 
         <div className='flex  w-[100%] h-[80px] flex-row justify-start items-center'>
           <div className='text-[1.5rem] text-gray-900 ml-[3%]'> <MdOutlineWatchLater /> </div>
-          <div className='text-gray-900 ml-[12%] md:text-[1.5rem]  text-[1.2rem]'>{`${WEEK_TABLE[dayItem.weekday]}, ${MONTH_TABLE[dayItem.month]} ${dayItem.date}`}</div>
+          <div className='text-gray-900 ml-[12%] md:text-[1.5rem]  text-[1.2rem]'>{`${WEEK_TABLE[taskData.taskDate.weekday]}, ${MONTH_TABLE[taskData.taskDate.month]} ${taskData.taskDate.date}`}</div>
         </div>
 
 
@@ -85,7 +108,8 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
             placeholder='Add a description'
             className='w-[80%] mt-7 border-0 border-b-2 md:ml-[11%] ml-[9%] outline-none 
             border-transparent focus:outline-none focus:ring-0 text-gray-900 md:text-[1.5rem]  text-[1.2rem]'
-            onChange={e => setTaskDesc(e.target.value)}
+            value={taskData.taskDesc}
+            onChange={e => setTaskData(prev => ({ ...prev, taskDesc: e.target.value }))}
           />
         </div>
 
@@ -93,14 +117,13 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
           <div className='text-[1.5rem] text-gray-900 ml-[3%]'> <IoBookmarkOutline /> </div>
           <div className='flex gap-[10px] justify-center items-center ml-[12%]'>
             {
-
               TASK_COLOR_TABLE.map((color, index) => {
                 let classStr = `md:w-[40px] md:h-[40px] w-[30px] h-[30px] bg-${color}-500 rounded-3xl border-2 cursor-pointer flex justify-center items-center`
                 return (
                   <span className={classStr} key={index}
-                    onClick={() => setTaskColor(index)}>
+                    onClick={e => setTaskData(prev => ({ ...prev, taskColor: index }))}>
                     {
-                      (taskColor === index) &&
+                      (taskData.taskColor === index) &&
                       < AiOutlineCheck className='text-[15px] text-white' />
                     }
                   </span>)
