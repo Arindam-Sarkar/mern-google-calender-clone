@@ -56,7 +56,7 @@ const LeftPanel = () => {
   // If the taskDataList is changed, then update the color list
   useEffect(() => {
     dispatch(updateColorList({ taskDataList: taskDataList }))
-  }, taskDataList)
+  }, [taskDataList])
 
 
   // Change the color visibility, this will be used to in the right section

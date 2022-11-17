@@ -55,13 +55,18 @@ const taskListSLice = createSlice({
       { exists: false, visibility: true },
       { exists: false, visibility: true }]
 
-      rdColorArray.map((colorItem, indexColor) => {
-        action.payload.taskDataList.map((taskItem) => {
-          if (taskItem.taskColor === indexColor) {
-            wrColorArray[indexColor] = { exists: true, visibility: colorItem.visibility }
-          }
+      if (action.payload.taskDataList.length > 0) {
+        rdColorArray.map((colorItem, indexColor) => {
+          action.payload.taskDataList.map((taskItem) => {
+            if (taskItem.taskColor === indexColor) {
+              wrColorArray[indexColor] = { exists: true, visibility: colorItem.visibility }
+            }
+          })
         })
-      })
+      }
+
+      // Remove from local storage
+      localStorage.removeItem("taskColorList")
 
       // Write it into local storage 
       localStorage.setItem("taskColorList", JSON.stringify(wrColorArray))
