@@ -10,7 +10,18 @@ import { MONTH_TABLE, WEEK_TABLE, TASK_COLOR_TABLE } from '../../utilities'
 import { addToTaskList, updateToTaskList, removeFromTaskList } from '../../features/tasksList/taskListSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
+import dayjs, { Dayjs } from 'dayjs';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+
 const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
+  const [editDatevalue, setEditDateValue] = useState();
+
   const [taskData, setTaskData] = useState({
     taskId: 0,
     taskDate: {},
@@ -26,8 +37,38 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
   const singleDaySaveHandler = (e) => {
     e.preventDefault()
 
+    // {
+    //   "taskId": 951539410535078,
+    //   "taskDate": {
+    //     "date": 16,
+    //     "month": 10,
+    //     "year": 2022,
+    //     "weekday": 3,
+    //     "currentMonth": 10,
+    //     "currentYear": 2022
+    //   },
+    //   "taskTitle": "tsk16",
+    //   "taskDesc": "tsk16Desc",
+    //   "taskColor": 0
+    // }
+
     if (isEdit === true) {
-      dispatch(updateToTaskList(taskData))
+
+      const { taskDate, ...remaining } = taskData
+
+      const taskDataNew = {
+        ...remaining,
+        taskDate: {
+          date: editDatevalue.date(),
+          month: editDatevalue.month(),
+          year: editDatevalue.year(),
+          weekday: editDatevalue.day(),
+          currentMonth: taskDate.currentMonth,
+          currentYear: taskDate.currentYear
+        }
+      }
+      // console.log("taskDataNew =", taskDataNew);
+      dispatch(updateToTaskList(taskDataNew))
     } else {
       dispatch(addToTaskList(taskData))
     }
@@ -53,8 +94,12 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
         }
       })
 
-      // console.log("taskToEdit = ", taskToEdit);
       setTaskData(taskToEdit)
+
+      // Configure dayjs for that specific date, so that we can configure
+      // editDateValue and use it inside mui component
+      const dayObj = dayjs(`${taskToEdit.taskDate.year}-${taskToEdit.taskDate.month + 1}-${taskToEdit.taskDate.date}`)
+      setEditDateValue(dayObj)
     } else {
       let taskId = Math.floor((Math.random() * 999999999999999) + 1)
       setTaskData(prev => ({ ...prev, taskDate: dayItem, taskId: taskId }))
@@ -97,7 +142,28 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
 
         <div className='flex  w-[100%] h-[80px] flex-row justify-start items-center'>
           <div className='text-[1.5rem] text-gray-900 ml-[3%]'> <MdOutlineWatchLater /> </div>
-          <div className='text-gray-900 ml-[12%] md:text-[1.5rem]  text-[1.2rem]'>{`${WEEK_TABLE[taskData.taskDate.weekday]}, ${MONTH_TABLE[taskData.taskDate.month]} ${taskData.taskDate.date}`}</div>
+          {
+            (isEdit === true) ?
+              (
+                <div className='text-gray-900  ml-[12%] md:text-[1.5rem]  text-[1.2rem]'>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Stack spacing={3}>
+                      <DesktopDatePicker
+                        value={editDatevalue}
+                        minDate={dayjs('2017-01-01')}
+                        onChange={(newValue) => { setEditDateValue(newValue) }}
+                        renderInput={(params) => <TextField {...params} />} />
+                    </Stack>
+                  </LocalizationProvider>
+                </div>
+              ) :
+              (
+                <div className='text-gray-900 ml-[12%] md:text-[1.5rem]  text-[1.2rem]'>
+                  {`${WEEK_TABLE[taskData.taskDate.weekday]}, ${MONTH_TABLE[taskData.taskDate.month]} ${taskData.taskDate.date}`}
+                </div>
+              )
+          }
+
         </div>
 
 
