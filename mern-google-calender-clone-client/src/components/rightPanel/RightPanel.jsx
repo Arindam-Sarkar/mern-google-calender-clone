@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { AiOutlineClose } from 'react-icons/ai'
 import { moveMonth } from '../../features/currentMonth/currentMonthSlice.js'
 import { MONTH_TABLE, TASK_COLOR_TABLE, WEEK_TABLE } from '../../utilities'
 import SingleDayDetails from '../singeDayDetails/SingleDayDetails.jsx'
@@ -15,6 +16,8 @@ const RightPanel = () => {
   const [today, setToday] = useState({})
   const [selectedDate, setSelectedDate] = useState({})
   const [showSingleDayDetails, setShowSingleDayDetails] = useState({ show: false, dayItem: {}, isEdit: false, taskId: 0 })
+  const [showOtherTasks, setShowOtherTasks] = useState({ show: false, dayItem: {} })
+
 
   const [dayTask, setDayTask] = useState({
     edit: false,
@@ -54,6 +57,18 @@ const RightPanel = () => {
     // console.log(taskDataList);
   }, [])
 
+  const showOtherItemsHandler = (taskDate) => {
+    // if (showOtherTasks.show !== true) {
+    //   setShowOtherTasks({ show: true, dayItem: taskDate })
+    // }
+    setShowOtherTasks({ show: true, dayItem: taskDate })
+  }
+
+  const exitShowOtherItemsHandler = (e) => {
+    e.preventDefault()
+    setShowOtherTasks({ show: false, dayItem: {} })
+  }
+
   const enterSingleDayDetailsHandler = (dayItem) => {
     setShowSingleDayDetails({
       show: true, dayItem: dayItem, isEdit: false, taskId: 0
@@ -76,7 +91,46 @@ const RightPanel = () => {
   return (
     <div className='m-0 p-0 w-[80%] h-[93vh] bg-[white] flex flex-col justify-start items-center'>
 
-      {((showSingleDayDetails.show) === true) &&
+      {(showOtherTasks.show === true) &&
+        <div className='fixed left-0 right-0 mt-20 '>
+          <div className='border w-screen h-screen flex justify-center items-start'>
+            <div className='md:w-[40%] md:h-[55%]  bg-white 
+            flex flex-col rounded-2xl w-[90%] h-[45%] justify-start items-center'>
+              <AiOutlineClose
+                className='text-[20px] mt-4 ml-[93%] cursor-pointer'
+                onClick={(e) => exitShowOtherItemsHandler(e)} />
+
+              <div className='w-[90%] h-[80%] mt-5 
+              flex flex-col justify-start items-center gap-3 overflow-y-scroll'>
+                {
+                  taskDataList.map((taskitem, index) => {
+                    if (
+                      (taskitem.taskDate.date === showOtherTasks.dayItem.date) &&
+                      (taskitem.taskDate.month === showOtherTasks.dayItem.month) &&
+                      (taskitem.taskDate.year === showOtherTasks.dayItem.year) &&
+                      (taskitem.taskDate.weekday === showOtherTasks.dayItem.weekday) &&
+                      (taskColorList[taskitem.taskColor].visibility === true)
+                    ) {
+                      return (
+                        <div
+                          className={`w-[95%] h-[30px]  min-h-[30px] bg-${TASK_COLOR_TABLE[taskitem.taskColor]}-500 
+                          border-2 rounded-md flex justify-start items-center cursor-pointer
+                          text-[white] pl-2`}
+                          onClick={() => updateSingleDayDetailsHandler(taskitem)}>
+                          {taskitem.taskTitle}
+                        </div>
+                      )
+                    }
+
+                  })
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      {(showSingleDayDetails.show === true) &&
         <div className='fixed left-0 right-0 mt-20'>
           <SingleDayDetails
             dayItem={showSingleDayDetails.dayItem}
@@ -156,7 +210,9 @@ const RightPanel = () => {
                             <div className={`w-[80%] h-[21px]
                              bg-${TASK_COLOR_TABLE[taskitem.taskColor]}-500 border-2 rounded-md
                              flex justify-center items-center cursor-pointer text-[white]`}>
-                              <div className=''>Other Items ...</div>
+                              <div className=''
+                                onClick={() => showOtherItemsHandler(taskitem.taskDate)}
+                              >Other Items ...</div>
                             </div>
                           )
                         }
