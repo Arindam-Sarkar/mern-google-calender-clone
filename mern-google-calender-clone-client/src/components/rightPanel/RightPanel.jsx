@@ -116,7 +116,8 @@ const RightPanel = () => {
                           className={`w-[95%] h-[30px]  min-h-[30px] bg-${TASK_COLOR_TABLE[taskitem.taskColor]}-500 
                           border-2 rounded-md flex justify-start items-center cursor-pointer
                           text-[white] pl-2`}
-                          onClick={() => updateSingleDayDetailsHandler(taskitem)}>
+                          onClick={() => updateSingleDayDetailsHandler(taskitem)}
+                          key={index} >
                           {taskitem.taskTitle}
                         </div>
                       )
@@ -143,12 +144,12 @@ const RightPanel = () => {
 
       <div className='w-[100%]   grid grid-cols-7 gap-x-0'>
         {
-          WEEK_TABLE.map((weekday) => {
+          WEEK_TABLE.map((weekday, index) => {
             return (
-              <>
-                <div className='m-0 p-0 border-[1px] border-gray-300 border-b-0 
-                text-[16px] font-semibold  text-gray-700'>{weekday.slice(0, 3).toUpperCase()}</div>
-              </>
+              <div className='m-0 p-0 border-[1px] border-gray-300 border-b-0 
+                text-[16px] font-semibold  text-gray-700' key={index}>
+                {weekday.slice(0, 3).toUpperCase()}
+              </div>
             )
           })
         }
@@ -200,7 +201,7 @@ const RightPanel = () => {
                              bg-${TASK_COLOR_TABLE[taskitem.taskColor]}-500 border-2 rounded-md
                              flex justify-start items-center cursor-pointer text-[white] pl-2`}
                               onClick={() => updateSingleDayDetailsHandler(taskitem)}
-                            >
+                              key={index} >
                               {taskitem.taskTitle}
                             </div>
                           )
@@ -212,7 +213,7 @@ const RightPanel = () => {
                              flex justify-center items-center cursor-pointer text-[white]`}>
                               <div className=''
                                 onClick={() => showOtherItemsHandler(taskitem.taskDate)}
-                              >Other Items ...</div>
+                                key={index} >Other Items ...</div>
                             </div>
                           )
                         }

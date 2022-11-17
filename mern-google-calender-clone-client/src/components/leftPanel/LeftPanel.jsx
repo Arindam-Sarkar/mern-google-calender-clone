@@ -198,7 +198,7 @@ const LeftPanel = () => {
           TASK_COLOR_TABLE.map((color, index) => {
             if (taskColorList[index].exists === true) {
               return (
-                <div className='w-[100%]  flex justify-start items-center gap-4'>
+                <div className='w-[100%]  flex justify-start items-center gap-4' key={index}>
                   <input
                     type='checkbox'
                     className='m-0 p-0 ml-6 w-[20px] h-[20px]  cursor-pointer 
