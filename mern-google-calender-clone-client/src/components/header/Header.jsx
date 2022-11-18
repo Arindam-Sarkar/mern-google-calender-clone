@@ -7,6 +7,7 @@ import { MONTH_TABLE } from '../../utilities'
 
 const Header = () => {
   const monthArrayDataMain = useSelector((state) => state.currentMonth.monthArrayDataMain)
+  const userAuthData = useSelector((state) => state.userAuth.userAuthData)
 
   const dispatch = useDispatch()
 
@@ -41,6 +42,8 @@ const Header = () => {
     }))
   }
 
+  // 
+
   return (
     <div className='w-[100vw] h-[7vh] m-0 p-0 bg-[white] border-gray-300
     border-b-2 flex gap-4 justify-start items-center text-2xl z-40'>
@@ -50,24 +53,37 @@ const Header = () => {
         className='ml-[10px] w-[50px]'
       />
 
+
       <div className=' text-gray-500'>Calender</div>
 
-      <button className='ml-[50px] text-[1.25rem] text-gray-600 bg-white border-2 w-[100px] h-[35px] 
-      text-center rounded-l hover:bg-gray-100 active:bg-gray-200'
-        onClick={(e) => todayClickHandler(e)}
-      >Today</button>
+      {
+        (userAuthData?._id !== undefined) ? (
+          <>
+            <button className='ml-[50px] text-[1.25rem] text-gray-600 bg-white border-2 w-[100px] h-[35px] 
+               text-center rounded-l hover:bg-gray-100 active:bg-gray-200'
+              onClick={(e) => todayClickHandler(e)}
+            >Today</button>
 
-      <IoIosArrowBack
-        className='ml-5 cursor-pointer text-gray-600'
-        onClick={(e) => prevMonthClickHandler(e)} />
+            <IoIosArrowBack
+              className='ml-5 cursor-pointer text-gray-600'
+              onClick={(e) => prevMonthClickHandler(e)} />
 
-      <IoIosArrowForward
-        className='ml-3 cursor-pointer text-gray-600'
-        onClick={(e) => nextMonthClickHandler(e)} />
+            <IoIosArrowForward
+              className='ml-3 cursor-pointer text-gray-600'
+              onClick={(e) => nextMonthClickHandler(e)} />
 
-      <div className='ml-5 text-gray-500 font-semibold'>
-        {`${MONTH_TABLE[monthArrayDataMain[0].currentMonth]} ${monthArrayDataMain[0].currentYear}`}
-      </div>
+            <div className='ml-5 text-gray-500 font-semibold'>
+              {`${MONTH_TABLE[monthArrayDataMain[0].currentMonth]} ${monthArrayDataMain[0].currentYear}`}
+            </div>
+          </>) :
+          (
+            <>
+
+            </>
+          )
+      }
+
+
     </div>
   )
 }

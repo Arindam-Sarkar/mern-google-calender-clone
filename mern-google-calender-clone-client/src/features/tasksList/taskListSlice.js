@@ -146,7 +146,7 @@ const taskListSLice = createSlice({
         lsWrArray.push(action.payload)
       }
 
-      console.log("lsWrArray = ", lsWrArray);
+      // console.log("lsWrArray = ", lsWrArray);
 
       // Remove from local storage
       localStorage.removeItem("taskDataList")

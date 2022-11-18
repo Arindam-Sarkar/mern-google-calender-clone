@@ -49,7 +49,7 @@ const LeftPanel = () => {
     //   }
     // }))
 
-    console.log(taskDataList);
+    // console.log(taskDataList);
   }, [])
 
 
