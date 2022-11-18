@@ -81,10 +81,10 @@ const Login = () => {
         </div>
       </form>
 
-      <div className='w-full mt-[30px] text-[1rem] cursor-pointer text-blue-900'
-        onClick={() => navigate('/signup')}>
-        New User? Click Here to Sign-Up.
-      </div>
+      <div className='w-full mt-[30px] text-[1rem]  text-blue-900'>
+        New User? Click <span
+          className='text-[1rem] text-red-600 underline cursor-pointer font-semibold'
+          cursor-pointer onClick={() => navigate('/signup')}>Here</span> to Sign-Up.</div>
 
       <ToastContainer
         position="top-center"
