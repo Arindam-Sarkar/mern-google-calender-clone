@@ -18,7 +18,7 @@ const Hero = () => {
     try {
       const resp = await axios.get(`/task/getall/${userAuthData._id}`)
       resp.data?.map((task) => {
-        // console.log("resp.data =", resp.data)
+        console.log("fetchDataFromServer -> resp.data =", resp.data)
         let { taskId, taskDate, taskTitle, taskDesc, taskColor } = task
         // console.log({ taskId, taskDate, taskTitle, taskDesc, taskColor });
         dispatch(addToTaskList({ taskId, taskDate, taskTitle, taskDesc, taskColor }))

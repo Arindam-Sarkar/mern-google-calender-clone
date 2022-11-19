@@ -81,10 +81,50 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
     exitHandler()
   }
 
+  // "proxy": "http://localhost:8800/api"
+  // localhost:8800/api/task/remove/63779acbddaad97d6a441a83
+  // localhost:8800/api/task/remove/63779acbddaad97d6a441a83
+
+  // in code
+  // {
+  //   "userId": "63779acbddaad97d6a441a83",
+  //   "taskId": 794618984009383,
+  //   "taskDate": {
+  //     "date": 16,
+  //     "month": 10,
+  //     "year": 2022,
+  //     "weekday": 3,
+  //     "currentMonth": 10,
+  //     "currentYear": 2022
+  //   },
+  //   "taskTitle": "tsk16",
+  //   "taskDesc": "tsk16",
+  //   "taskColor": 2
+  // }
+
+  // in tool
+  //   {
+  //     "userId": "63779acbddaad97d6a441a83",
+  //    "taskId": 794618984009383,
+  //    "taskDate": {
+  //    "date": 16,
+  //    "month": 10,
+  //    "year": 2022,
+  //    "weekday": 3,
+  //    "currentMonth": 10,
+  //    "currentYear": 2022
+  //    },
+  //    "taskTitle": "tsk16",
+  //    "taskDesc": "tsk16Desc",
+  //    "taskColor": 0
+  //  }
   const deleteTaskDataInServer = async (taskData) => {
     const serverObj = { userId: userAuthData._id, ...taskData }
+    // console.log("deleteTaskDataInServer -> serverObj =", serverObj);
+
+    // console.log(`/task/remove/${userAuthData._id}`)
     try {
-      const resp = await axios.delete(`/task/remove/${userAuthData._id}`, serverObj)
+      const resp = await axios.put(`/task/remove/${userAuthData._id}`, serverObj)
       console.log("resp = ", resp)
     } catch (error) {
       console.log(error)
@@ -94,6 +134,7 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
   const singleDayDeleteHandler = (e) => {
     e.preventDefault()
 
+    // console.log("taskData =", taskData);
     dispatch(removeFromTaskList(taskData))
     deleteTaskDataInServer(taskData)
     exitHandler()

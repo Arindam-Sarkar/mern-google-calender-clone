@@ -27,10 +27,14 @@ export const updateTask = async (req, res, next) => {
 }
 
 export const removeTask = async (req, res, next) => {
+  // console.log("req.params.userId : ", req.params.userId);
+  // console.log("req.body.taskId :", req.body.taskId);
+  // console.log("req.body :", req.body);
   try {
-    const updatedTasks = await taskModel.findOneAndDelete(
+    const removedTask = await taskModel.findOneAndDelete(
       { userId: req.params.userId, taskId: req.body.taskId }, { new: true })
-    res.status(200).json(updatedTasks)
+    console.log("removedTask = ", removedTask)
+    res.status(200).json(removedTask)
   } catch (error) {
     // console.log(error)
     next(error)
