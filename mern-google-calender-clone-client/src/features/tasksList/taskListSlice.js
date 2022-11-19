@@ -194,6 +194,11 @@ const taskListSLice = createSlice({
         // Change the state variable
         state.taskDataList = lsWrArray
       }
+    },
+
+    emptyTaskList: (state, action) => {
+      localStorage.removeItem("taskDataList")
+      state.taskDataList = []
     }
   }
 
@@ -204,5 +209,6 @@ export const {
   changeColorListVisibility,
   addToTaskList,
   updateToTaskList,
-  removeFromTaskList } = taskListSLice.actions
+  removeFromTaskList,
+  emptyTaskList } = taskListSLice.actions
 export default taskListSLice.reducer

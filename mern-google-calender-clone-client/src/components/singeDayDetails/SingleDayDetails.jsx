@@ -22,9 +22,12 @@ import axios from 'axios'
 
 const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
   const userAuthData = useSelector((state) => state.userAuth.userAuthData)
+  const taskDataList = useSelector((state) => state.taskList.taskDataList)
+
   const [editDatevalue, setEditDateValue] = useState();
 
   const [taskData, setTaskData] = useState({
+    userId: userAuthData._id,
     taskId: 0,
     taskDate: {},
     taskTitle: "",
@@ -32,21 +35,16 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
     taskColor: 0
   })
 
-  const taskDataList = useSelector((state) => state.taskList.taskDataList)
-
   const dispatch = useDispatch()
 
   const sendTaskDataToServer = async (taskData, isEdit) => {
-    const serverObj = { userId: userAuthData._id, ...taskData }
-    // console.log("serverObj =", serverObj)
-    // console.log("taskData =", taskData);
     try {
       if (isEdit === true) {
-        const resp = await axios.put(`/task/update/${userAuthData._id}`, serverObj)
-        // console.log("resp.data =", resp.data)
+        const resp = await axios.put(`/task/update/${userAuthData._id}`, taskData)
+        console.log("sendTaskDataToServer -> resp.data =", resp.data)
       } else {
-        const resp = await axios.post(`/task/create/${userAuthData._id}`, serverObj)
-        // console.log("resp.data =", resp.data)
+        const resp = await axios.post(`/task/create/${userAuthData._id}`, taskData)
+        console.log("sendTaskDataToServer -> resp.data =", resp.data)
       }
     } catch (error) {
       console.log(error)
