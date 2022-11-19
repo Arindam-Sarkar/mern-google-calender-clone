@@ -105,29 +105,40 @@ const taskListSLice = createSlice({
       // console.log("action.payload = ", action.payload)
 
       let lsWrArray = new Array()
+      let idExists = false
 
       // Read local Storage
       let lsRdArray = readLocalStorageTaskList("taskDataList")
       if (lsRdArray && lsRdArray.length > 0) {
-        lsWrArray = [...lsRdArray, action.payload]
+        lsRdArray.map((task) => {
+          // Do not add the task if it's id already exists
+          if (task.taskId === action.payload.taskId) {
+            idExists = true
+          }
+        })
+        if (idExists === false) {
+          lsWrArray = [...lsRdArray, action.payload]
+        }
       } else {
         lsWrArray.push(action.payload)
       }
 
-      // console.log("lsWrArray = ", lsWrArray);
+      if (idExists === false) {
+        // console.log("lsWrArray = ", lsWrArray);
 
-      // Remove from local storage
-      localStorage.removeItem("taskDataList")
+        // Remove from local storage
+        localStorage.removeItem("taskDataList")
 
-      // Write it into local storage 
-      localStorage.setItem("taskDataList", JSON.stringify(lsWrArray))
+        // Write it into local storage 
+        localStorage.setItem("taskDataList", JSON.stringify(lsWrArray))
 
-      // Change the state variable
-      state.taskDataList = lsWrArray
+        // Change the state variable
+        state.taskDataList = lsWrArray
+      }
     },
 
     updateToTaskList: (state, action) => {
-      // console.log("action.payload = ", action.payload)
+      console.log("action.payload = ", action.payload)
 
       let lsWrArray = new Array()
 

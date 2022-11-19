@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { addUserAuthData, removeUserAuthData } from '../../features/userAuth/userAuthSlice'
 import axios from 'axios';
-import { serverUrl } from '../../serverUrl.js'
+// import { serverUrl } from '../../serverUrl.js'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,13 +22,14 @@ const Login = () => {
   const userLoginHandler = async (e) => {
     e.preventDefault();
 
-    console.log("loginData =", loginData);
     try {
-      const resp = await axios.post(`${serverUrl}/api/user/login`, loginData)
+      // const resp = await axios.post(`${serverUrl}/api/user/login`, loginData)
+      const resp = await axios.post('/user/login', loginData)
+
       // Clear error message
       setLoginError({ errPresent: false, errMsg: "" })
 
-      console.log(resp)
+      console.log("resp =", resp)
       if (resp.data?._id !== undefined) {
         toast("Login Successful")
 
