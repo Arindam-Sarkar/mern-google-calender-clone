@@ -10,7 +10,7 @@ export const createTask = async (req, res, next) => {
     const savedTask = await newTask.save({ new: true })
     res.status(200).json(savedTask)
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     next(error)
   }
 }
@@ -21,7 +21,7 @@ export const updateTask = async (req, res, next) => {
       { userId: req.params.userId, taskId: req.body.taskId }, { ...req.body }, { new: true },)
     res.status(200).json(updatedTasks)
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     next(error)
   }
 }
@@ -32,7 +32,7 @@ export const removeTask = async (req, res, next) => {
       { userId: req.params.userId, taskId: req.body.taskId }, { new: true })
     res.status(200).json(updatedTasks)
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     next(error)
   }
 }

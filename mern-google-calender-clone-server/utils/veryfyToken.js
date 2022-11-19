@@ -19,8 +19,8 @@ const veryfyToken = (req, res, next) => {
 
 export const verifyUser = (req, res, next) => {
   veryfyToken(req, res, () => {
-    console.log("req.user.id = ", req.user.id);
-    console.log("req.params.userId = ", req.params.userId);
+    // console.log("req.user.id = ", req.user.id);
+    // console.log("req.params.userId = ", req.params.userId);
 
     if (req.user.id === req.params.userId || req.user.isAdmin) {
       next();

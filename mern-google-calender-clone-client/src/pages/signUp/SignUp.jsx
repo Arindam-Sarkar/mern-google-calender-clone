@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-// import './signUp.css'
-
+import { serverUrl } from '../../serverUrl.js'
 
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux'
@@ -28,44 +27,47 @@ const SignUp = () => {
   const [regError, setRegError] = useState({ errPresent: false, errMsg: "" })
   const [regData, setRegData] = useState({
     username: "", password: "", passwordReEnter: "",
-    addressLine1: "", addressLine2: "",
-    city: "", state: "", email: "", phone: ""
   })
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-
-
   const userSignUpHandler = async (e) => {
     e.preventDefault();
 
-    try {
-      const resp = await axios.post("/user/register/", regData)
-      // Clear error message
-      setRegError({ errPresent: false, errMsg: "" })
+    if (regData.password !== regData.passwordReEnter) {
+      setRegData(prev => ({ ...prev, password: "", passwordReEnter: "" }))
+      toast('Passwords must be same')
+    }
+    else {
+      try {
+        const resp = await axios.post(`${serverUrl}/api/user/register`, regData)
+        // Clear error message
+        setRegError({ errPresent: false, errMsg: "" })
 
-      if (resp.data?._id !== undefined) {
-        // Login Successful, put this user data in redux store
-        dispatch(addUserAuthData(resp.data))
+        if (resp.data?._id !== undefined) {
+          // Login Successful, put this user data in redux store
+          dispatch(addUserAuthData(resp.data))
 
-        toast("Sign-Up Successful")
+          toast("Sign-Up Successful")
 
-        // Navigate to home page
-        navigate('/')
-      }
-    } catch (error) {
-      if (error.response.data.message?.match('E11000')) {
-        if ((error.response.data.message?.match('email_1 dup'))) {
-          setRegError({ errPresent: true, errMsg: "Error - Email already in use" })
-          toast("Error - Email already in use")
-        } else if ((error.response.data.message?.match('phone_1 dup'))) {
-          setRegError({ errPresent: true, errMsg: "Error - Phone already in use" })
-          toast("Error - Phone number already in use")
+          // Navigate to home page
+          navigate('/')
         }
-        window.scrollTo(0, 0)
+      } catch (error) {
+        if (error.response.data.message?.match('E11000')) {
+          if ((error.response.data.message?.match('email_1 dup'))) {
+            setRegError({ errPresent: true, errMsg: "Error - Email already in use" })
+            toast("Error - Email already in use")
+          } else if ((error.response.data.message?.match('phone_1 dup'))) {
+            setRegError({ errPresent: true, errMsg: "Error - Phone already in use" })
+            toast("Error - Phone number already in use")
+          }
+          window.scrollTo(0, 0)
+        }
       }
     }
+
   }
 
 
