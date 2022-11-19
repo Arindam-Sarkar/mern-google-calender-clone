@@ -18,8 +18,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import axios from 'axios'
 
 const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
+  const userAuthData = useSelector((state) => state.userAuth.userAuthData)
   const [editDatevalue, setEditDateValue] = useState();
 
   const [taskData, setTaskData] = useState({
@@ -34,23 +36,25 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
 
   const dispatch = useDispatch()
 
+  const sendTaskDataToServer = async (taskData, isEdit) => {
+    const serverObj = { userId: userAuthData._id, ...taskData }
+    // console.log("serverObj =", serverObj)
+    // console.log("taskData =", taskData);
+    try {
+      if (isEdit === true) {
+        const resp = await axios.put(`/task/update/${userAuthData._id}`, serverObj)
+        // console.log("resp.data =", resp.data)
+      } else {
+        const resp = await axios.post(`/task/create/${userAuthData._id}`, serverObj)
+        // console.log("resp.data =", resp.data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const singleDaySaveHandler = (e) => {
     e.preventDefault()
-
-    // {
-    //   "taskId": 951539410535078,
-    //   "taskDate": {
-    //     "date": 16,
-    //     "month": 10,
-    //     "year": 2022,
-    //     "weekday": 3,
-    //     "currentMonth": 10,
-    //     "currentYear": 2022
-    //   },
-    //   "taskTitle": "tsk16",
-    //   "taskDesc": "tsk16Desc",
-    //   "taskColor": 0
-    // }
 
     if (isEdit === true) {
 
@@ -69,16 +73,29 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
       }
       // console.log("taskDataNew =", taskDataNew);
       dispatch(updateToTaskList(taskDataNew))
+      sendTaskDataToServer(taskDataNew, isEdit)
     } else {
       dispatch(addToTaskList(taskData))
+      sendTaskDataToServer(taskData, isEdit)
     }
     exitHandler()
+  }
+
+  const deleteTaskDataInServer = async (taskData) => {
+    const serverObj = { userId: userAuthData._id, ...taskData }
+    try {
+      const resp = await axios.delete(`/task/remove/${userAuthData._id}`, serverObj)
+      console.log("resp = ", resp)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const singleDayDeleteHandler = (e) => {
     e.preventDefault()
 
     dispatch(removeFromTaskList(taskData))
+    deleteTaskDataInServer(taskData)
     exitHandler()
   }
 
