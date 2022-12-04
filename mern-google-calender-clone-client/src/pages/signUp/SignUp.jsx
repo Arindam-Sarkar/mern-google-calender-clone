@@ -41,7 +41,7 @@ const SignUp = () => {
     }
     else {
       try {
-        const resp = await axios.post(`${serverUrl}/api/user/register`, regData)
+        const resp = await axios.post(`${serverUrl}/user/register`, regData)
         // Clear error message
         setRegError({ errPresent: false, errMsg: "" })
 
