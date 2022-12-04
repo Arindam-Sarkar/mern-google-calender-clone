@@ -19,6 +19,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import axios from 'axios'
+import { serverUrl } from '../../serverUrl.js'
 
 const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
   const userAuthData = useSelector((state) => state.userAuth.userAuthData)
@@ -40,10 +41,10 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
   const sendTaskDataToServer = async (taskData, isEdit) => {
     try {
       if (isEdit === true) {
-        const resp = await axios.put(`/task/update/${userAuthData._id}`, taskData)
+        const resp = await axios.put(`${serverUrl}/task/update/${userAuthData._id}`, taskData)
         console.log("sendTaskDataToServer -> resp.data =", resp.data)
       } else {
-        const resp = await axios.post(`/task/create/${userAuthData._id}`, taskData)
+        const resp = await axios.post(`${serverUrl}/task/create/${userAuthData._id}`, taskData)
         console.log("sendTaskDataToServer -> resp.data =", resp.data)
       }
     } catch (error) {
@@ -116,13 +117,14 @@ const SingleDayDetails = ({ dayItem, isEdit, taskId, exitHandler }) => {
   //    "taskDesc": "tsk16Desc",
   //    "taskColor": 0
   //  }
+
   const deleteTaskDataInServer = async (taskData) => {
     const serverObj = { userId: userAuthData._id, ...taskData }
     // console.log("deleteTaskDataInServer -> serverObj =", serverObj);
 
     // console.log(`/task/remove/${userAuthData._id}`)
     try {
-      const resp = await axios.put(`/task/remove/${userAuthData._id}`, serverObj)
+      const resp = await axios.put(`${serverUrl}/task/remove/${userAuthData._id}`, serverObj)
       console.log("resp = ", resp)
     } catch (error) {
       console.log(error)

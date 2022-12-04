@@ -3,7 +3,7 @@ import { createErrorMsg } from "./errorResponse.js";
 
 const veryfyToken = (req, res, next) => {
   const token = req.cookies.access_token;
-  console.log('token = ', token)
+  // console.log('token = ', token)
   if (token === undefined) {
     return next(createErrorMsg(401, "You are not authenticated!"));
   }

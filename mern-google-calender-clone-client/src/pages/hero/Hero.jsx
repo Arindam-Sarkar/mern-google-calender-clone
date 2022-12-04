@@ -18,7 +18,7 @@ const Hero = () => {
 
   const fetchDataFromServer = async () => {
     try {
-      const resp = await axios.get(`/task/getall/${userAuthData._id}`)
+      const resp = await axios.get(`${serverUrl}/task/getall/${userAuthData._id}`)
 
       resp.data?.map((task) => {
         console.log("fetchDataFromServer -> resp.data =", resp.data)
