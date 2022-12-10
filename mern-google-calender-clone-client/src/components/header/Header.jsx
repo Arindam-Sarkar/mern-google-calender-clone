@@ -61,21 +61,27 @@ const Header = () => {
 
         <div className=' text-gray-500'>Calender</div>
 
-        <button className='ml-[50px] text-[1.2rem] text-gray-600 bg-white border-2 w-[100px] h-[35px] 
-          text-center rounded-l hover:bg-gray-100 active:bg-gray-200'
-          onClick={(e) => todayClickHandler(e)}>Today</button>
+        {
+          (userAuthData?._id !== undefined) ? (
+            <>
+              <button className='ml-[50px] text-[1.2rem] text-gray-600 bg-white border-2 w-[100px] h-[35px] 
+                text-center rounded-l hover:bg-gray-100 active:bg-gray-200'
+                onClick={(e) => todayClickHandler(e)}>Today</button>
 
-        <IoIosArrowBack
-          className='ml-5 cursor-pointer text-gray-600'
-          onClick={(e) => prevMonthClickHandler(e)} />
+              <IoIosArrowBack
+                className='ml-5 cursor-pointer text-gray-600'
+                onClick={(e) => prevMonthClickHandler(e)} />
 
-        <IoIosArrowForward
-          className='ml-3 cursor-pointer text-gray-600'
-          onClick={(e) => nextMonthClickHandler(e)} />
+              <IoIosArrowForward
+                className='ml-3 cursor-pointer text-gray-600'
+                onClick={(e) => nextMonthClickHandler(e)} />
 
-        <div className='ml-5 text-gray-500 font-semibold'>
-          {`${MONTH_TABLE[monthArrayDataMain[0].currentMonth]} ${monthArrayDataMain[0].currentYear}`}
-        </div>
+              <div className='ml-5 text-gray-500 font-semibold'>
+                {`${MONTH_TABLE[monthArrayDataMain[0].currentMonth]} ${monthArrayDataMain[0].currentYear}`}
+              </div>
+            </>
+          ) : (<></>)
+        }
       </div>
 
       {
